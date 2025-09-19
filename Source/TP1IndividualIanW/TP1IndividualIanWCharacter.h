@@ -1,5 +1,3 @@
-
-
 // Evita que el archivo se incluya más de una vez en la compilación (protección contra includes múltiples)
 #pragma once
 
@@ -27,7 +25,6 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 // Macro que indica que esta clase es un Actor de Unreal
-// 
 // La palabra "abstract" indica que esta clase no puede instanciarse directamente (sirve como base)
 
 UCLASS(abstract)
@@ -45,12 +42,7 @@ class ATP1IndividualIanWCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 	
-	// --- INPUT ACTIONS ---
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* RunAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* MostrarMensajeAction;
 
 protected:
 
@@ -72,6 +64,26 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* MouseLookAction;
 
+	// --- MI INPUT ACTIONS ---  
+
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* MostrarMensajeAction;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* CambiarVelocidadAction;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Speed")
+	bool bFastSpeed;
+
+	// Velocidad normal 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Speed")
+	float NormalSpeed;
+
+	// Velocidad rapida 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Speed")
+	float FastSpeed;
 
 public:
 
@@ -91,13 +103,6 @@ protected:
 	// Función que recibe valores de input para rotar la cámara
 	void Look(const FInputActionValue& Value);
 
-	// Setup de input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	// Funciones que responden a los inputs
-	void DoMostrarMensaje();
-	void DoRunStart();
-	void DoRunEnd();
 
 public:
 
@@ -118,6 +123,14 @@ public:
 	// Función que detiene el salto
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	virtual void DoJumpEnd();
+
+	// Funcion blueprint-callable para mostrar mensajes
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	virtual void DoMostrarMensaje();
+
+	// Funcion blueprint-callable para cambiar la velocidad del personaje
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	virtual void DoCambioVelocidad();
 
 public:
 
